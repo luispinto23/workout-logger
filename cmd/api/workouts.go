@@ -13,6 +13,7 @@ func (app *application) createWorkoutHandler(w http.ResponseWriter, r *http.Requ
 
 	type exercise struct {
 		Name        string `json:"name"`
+		Description string `json:"description"`
 		MuscleGroup string `json:"muscle_group"`
 		Type        string `json:"type"`
 		Equipment   []Equipment

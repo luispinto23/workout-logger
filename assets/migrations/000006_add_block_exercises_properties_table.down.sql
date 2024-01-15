@@ -1,0 +1,1 @@
+BLOCK TABLE block_exercise_properties;

@@ -1,1 +1,1 @@
-BLOCK TABLE block_exercise_properties;
+DROP TABLE block_exercise_properties;

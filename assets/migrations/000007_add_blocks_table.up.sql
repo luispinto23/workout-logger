@@ -2,7 +2,7 @@ CREATE TABLE blocks (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   comment TEXT,
-  created_at TIMESTAMP NOT NULL,
-  updated_at TIMESTAMP NOT NULL,
-  deleted_at TIMESTAMP
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  deleted_at TIMESTAMPTZ
 );

@@ -35,5 +35,12 @@ func (app *application) routes() http.Handler {
 
 	workoutRoutes.HandleFunc("/workouts/{id}/results", app.createResultHandler).Methods(http.MethodPost)
 
+	exercisesRoutes := mux.NewRoute().Subrouter()
+	exercisesRoutes.HandleFunc("/exercises", app.createExerciseHandler).Methods(http.MethodPost)
+	exercisesRoutes.HandleFunc("/exercises/{id}/equipment", app.addExerciseEquipmentHandler).Methods(http.MethodPost)
+
+	equipmentsRoutes := mux.NewRoute().Subrouter()
+	equipmentsRoutes.HandleFunc("/equipments", app.createEquipmentHandler).Methods(http.MethodPost)
+
 	return mux
 }

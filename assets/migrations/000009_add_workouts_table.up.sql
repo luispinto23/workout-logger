@@ -3,8 +3,8 @@ CREATE TABLE workouts (
   name VARCHAR(255) NOT NULL,
   date DATE,
   comment TEXT,
-  created_at TIMESTAMP NOT NULL,
-  updated_at TIMESTAMP NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   deleted_at TIMESTAMP,
   user_id INT REFERENCES users(id)
 );

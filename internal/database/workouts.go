@@ -5,22 +5,33 @@ import (
 	"time"
 )
 
-type Workout struct {
-	ID        int       `db:"id"`
-	CreatedAt time.Time `db:"created_at"`
-	Name      string    `db:"name"`
-	Date      time.Time `db:"date"`
-	Comment   string    `db:"comment"`
-	UpdatedAt time.Time `db:"updated_at"`
-	UserID    int       `db:"user_id"`
+// WorkoutBlock struct
+type WorkoutBlock struct {
+	ID          int        `db:"id"`
+	Name        string     `db:"name"`
+	Description string     `db:"description"`
+	MinSeries   int        `db:"min_series"`
+	MaxSeries   int        `db:"max_series"`
+	Comment     string     `db:"comment"`
+	Exercises   []Exercise `db:"exercises"`
 }
 
-type WorkoutBlock struct {
-	ID        int       `db:"id"`
-	Name      string    `db:"name"`
-	Comment   string    `db:"comment"`
-	CreatedAt time.Time `db:"created_at"`
-	UpdatedAt time.Time `db:"updated_at"`
+// WorkoutPrescription struct
+type WorkoutPrescription struct {
+	ID          int            `db:"id"`
+	Name        string         `db:"name"`
+	Description string         `db:"description"`
+	Blocks      []WorkoutBlock `db:"blocks"`
+}
+
+// WorkoutResult struct
+type WorkoutResult struct {
+	ID              int              `db:"id"`
+	WorkoutID       int              `db:"workout_id"`
+	Date            string           `db:"date"`
+	ExerciseResults []ExerciseResult `db:"exercise_results"`
+	BlockResults    []BlockResult    `db:"block_results"`
+	Comment         string           `db:"comment"`
 }
 
 func (db *DB) InsertWorkout(workout *Workout) (int, error) {

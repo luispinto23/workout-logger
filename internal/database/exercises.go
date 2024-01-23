@@ -5,16 +5,39 @@ import (
 	"time"
 )
 
+// Exercise struct
 type Exercise struct {
-	ID          int    `db:"id"`
-	Name        string `db:"name"`
-	Description string `db:"description"`
-	MuscleGroup string `db:"muscle_group"`
-	Type        string `db:"type"`
-	Difficulty  string `db:"difficulty"`
-	VideoURL    string `db:"video_url"`
-	CreatedAt   string `db:"created_at"`
-	UpdatedAt   string `db:"updated_at"`
+	ID            int    `db:"id"`
+	Name          string `db:"name"`
+	Description   string `db:"description"`
+	Type          string `db:"type"`
+	MuscleGroup   string `db:"muscle_group"`
+	Difficulty    string `db:"difficulty"`
+	DemoVideoURL  string `db:"demo_video_url"`
+	EquipmentList string `db:"equipment_list"`
+}
+
+// ExerciseInWorkoutPrescription struct
+type ExerciseInWorkoutPrescription struct {
+	ExerciseID int     `db:"exercise_id"`
+	WorkoutID  int     `db:"workout_id"`
+	MinReps    int     `db:"min_reps"`
+	MaxReps    int     `db:"max_reps"`
+	Weight     float32 `db:"weight"`
+	Duration   float32 `db:"duration"`
+	MinRest    int     `db:"min_rest"`
+	MaxRest    int     `db:"max_rest"`
+	Comment    string  `db:"comment"`
+}
+
+// ExerciseResult struct
+type ExerciseResult struct {
+	ExerciseID      int     `db:"exercise_id"`
+	WorkoutResultID int     `db:"workout_result_id"`
+	Repetitions     int     `db:"repetitions"`
+	Weight          float32 `db:"weight"`
+	Duration        float32 `db:"duration"`
+	Comment         string  `db:"comment"`
 }
 
 type ExerciseEquipment struct {

@@ -36,7 +36,7 @@ func (app *application) createWorkoutHandler(w http.ResponseWriter, r *http.Requ
 		Comment   string     `json:"comment"`
 	}
 
-	var input struct {
+	type workout struct {
 		Name    string  `json:"name"`
 		Date    string  `json:"date"`
 		Blocks  []block `json:"blocks"`

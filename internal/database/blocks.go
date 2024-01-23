@@ -2,12 +2,20 @@ package database
 
 import "context"
 
-type Block struct {
-	ID        int    `db:"id"`
-	Name      string `db:"name"`
+// BlockInWorkoutPrescription struct
+type BlockInWorkoutPrescription struct {
+	BlockID   int    `db:"block_id"`
+	WorkoutID int    `db:"workout_id"`
+	MinSeries int    `db:"min_series"`
+	MaxSeries int    `db:"max_series"`
 	Comment   string `db:"comment"`
-	CreatedAt string `db:"created_at"`
-	UpdatedAt string `db:"updated_at"`
+}
+
+// BlockResult struct
+type BlockResult struct {
+	BlockID         int    `db:"block_id"`
+	WorkoutResultID int    `db:"workout_result_id"`
+	Comment         string `db:"comment"`
 }
 
 func (db *DB) InsertBlock(block *Block) (int, error) {

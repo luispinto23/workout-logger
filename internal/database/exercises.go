@@ -8,42 +8,42 @@ import (
 // Exercise struct
 type Exercise struct {
 	ID            int    `db:"id"`
-	Name          string `db:"name"`
-	Description   string `db:"description"`
-	Type          string `db:"type"`
-	MuscleGroup   string `db:"muscle_group"`
-	Difficulty    string `db:"difficulty"`
-	DemoVideoURL  string `db:"demo_video_url"`
-	EquipmentList string `db:"equipment_list"`
+	Name          string `json:"name"`
+	Description   string `json:"description"`
+	Type          string `json:"type"`
+	MuscleGroup   string `json:"muscle_group"`
+	Difficulty    string `json:"difficulty"`
+	DemoVideoURL  string `json:"demo_video_url"`
+	EquipmentList string `json:"equipment_list"`
 }
 
 // ExerciseInWorkoutPrescription struct
 type ExerciseInWorkoutPrescription struct {
-	ExerciseID int     `db:"exercise_id"`
-	WorkoutID  int     `db:"workout_id"`
-	MinReps    int     `db:"min_reps"`
-	MaxReps    int     `db:"max_reps"`
-	Weight     float32 `db:"weight"`
-	Duration   float32 `db:"duration"`
-	MinRest    int     `db:"min_rest"`
-	MaxRest    int     `db:"max_rest"`
-	Comment    string  `db:"comment"`
+	ExerciseID int     `json:"exercise_id"`
+	WorkoutID  int     `json:"workout_id"`
+	MinReps    int     `json:"min_reps"`
+	MaxReps    int     `json:"max_reps"`
+	Weight     float32 `json:"weight"`
+	Duration   float32 `json:"duration"`
+	MinRest    int     `json:"min_rest"`
+	MaxRest    int     `json:"max_rest"`
+	Comment    string  `json:"comment"`
 }
 
 // ExerciseResult struct
 type ExerciseResult struct {
-	ExerciseID      int     `db:"exercise_id"`
-	WorkoutResultID int     `db:"workout_result_id"`
-	Repetitions     int     `db:"repetitions"`
-	Weight          float32 `db:"weight"`
-	Duration        float32 `db:"duration"`
-	Comment         string  `db:"comment"`
+	ExerciseID      int     `json:"exercise_id"`
+	WorkoutResultID int     `json:"workout_result_id"`
+	Repetitions     int     `json:"repetitions"`
+	Weight          float32 `json:"weight"`
+	Duration        float32 `json:"duration"`
+	Comment         string  `json:"comment"`
 }
 
 type ExerciseEquipment struct {
 	ID          int `db:"id"`
-	ExerciseID  int `db:"exercise_id"`
-	EquipmentID int `db:"equipment_id"`
+	ExerciseID  int `json:"exercise_id"`
+	EquipmentID int `json:"equipment_id"`
 	CreatedAt   int `db:"created_at"`
 	UpdatedAt   int `db:"updated_at"`
 }
@@ -60,7 +60,7 @@ func (db *DB) InsertExercise(exercise *Exercise) (int, error) {
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 		RETURNING id`
 
-	err := db.GetContext(ctx, &id, query, exercise.Name, exercise.Description, exercise.MuscleGroup, exercise.Type, exercise.Difficulty, exercise.VideoURL, now, now)
+	err := db.GetContext(ctx, &id, query, exercise.Name, exercise.Description, exercise.MuscleGroup, exercise.Type, exercise.Difficulty, exercise.DemoVideoURL, now, now)
 	if err != nil {
 		return 0, err
 	}
@@ -81,7 +81,6 @@ func (db *DB) InsertExerciseEquipment(ee *ExerciseEquipment) (int, error) {
 		RETURNING id`
 
 	err := db.GetContext(ctx, &id, query, ee.ExerciseID, ee.EquipmentID, now, now)
-
 	if err != nil {
 		return 0, err
 	}

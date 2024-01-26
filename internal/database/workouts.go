@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"my-workout-logs/internal/request"
 	"time"
 )
 
@@ -34,24 +35,53 @@ type WorkoutResult struct {
 	Comment         string           `db:"comment"`
 }
 
-func (db *DB) InsertWorkout(workout *Workout) (int, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+func (db *DB) CreateWorkoutPrescription(prescription *request.WorkoutPrescriptionRequest) (int, error) {
+	// Create a new workout prescription
+	workoutPrescription := WorkoutPrescription{
+		Name:        prescription.Name,
+		Description: prescription.Description,
+		Blocks:      []WorkoutBlock{},
+		created_at:  time.Now(),
+		updated_at:  time.Now(),
+	}
+
+	// Create workout blocks
+	for _, block := range prescription.Blocks {
+		blockID, err := db.CreateWorkoutBlock(&WorkoutBlock{
+			Name:        block.Name,
+			Description: block.Description,
+			Exercises:   []Exercise{},
+			MinSeries:   block.MinSeries,
+			MaxSeries:   block.MaxSeries,
+			Comment:     block.Comment,
+			created_at:  time.Now(),
+			updated_at:  time.Now(),
+		})
+		if err != nil {
+			return 0, err
+		}
+		workoutPrescription.Blocks = append(workoutPrescription.Blocks, WorkoutBlock{ID: blockID})
+	}
+
+	// Insert workout prescription into the database
+	ctx, cancel := context.WithTimeout(context.Background(), DefaultTimeout)
 	defer cancel()
 
 	var id int
-	now := time.Now()
-
 	query := `
-		INSERT INTO workouts (name, date, comment, user_id, created_at, updated_at)
-		VALUES ($1, $2, $3, $4, $5, $6)
-		RETURNING id`
+    INSERT INTO workout_prescriptions (name, description, blocks, created_at, updated_at)
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING id`
 
-	err := db.GetContext(ctx, &id, query, workout.Name, workout.Date, workout.Comment, workout.UserID, now)
+	err := db.GetContext(ctx, &id, query, workoutPrescription.Name, workoutPrescription.Description, workoutPrescription.Blocks, time.Now())
 	if err != nil {
 		return 0, err
 	}
 
-	return id, err
+	// Update workout prescription with its ID
+	workoutPrescription.ID = id
+
+	return id, nil
 }
 
 func (db *DB) InsertWorkoutBlock(block *Block) (int, error) {

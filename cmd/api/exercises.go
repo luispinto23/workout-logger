@@ -8,7 +8,6 @@ import (
 )
 
 func (app *application) createExerciseHandler(w http.ResponseWriter, r *http.Request) {
-
 	var input struct {
 		Name        string `json:"name"`
 		Description string `json:"description"`
@@ -25,12 +24,12 @@ func (app *application) createExerciseHandler(w http.ResponseWriter, r *http.Req
 	}
 
 	exercise := &database.Exercise{
-		Name:        input.Name,
-		Description: input.Description,
-		MuscleGroup: input.MuscleGroup,
-		Type:        input.Type,
-		Difficulty:  input.Difficulty,
-		VideoURL:    input.VideoURL,
+		Name:         input.Name,
+		Description:  input.Description,
+		MuscleGroup:  input.MuscleGroup,
+		Type:         input.Type,
+		Difficulty:   input.Difficulty,
+		DemoVideoURL: input.VideoURL,
 	}
 
 	_, err = app.db.InsertExercise(exercise)
@@ -47,7 +46,6 @@ func (app *application) addExerciseEquipmentHandler(w http.ResponseWriter, r *ht
 	exerciseID := vars["id"]
 
 	intExerciseID, err := strconv.Atoi(exerciseID)
-
 	if err != nil {
 		app.badRequest(w, r, err)
 		return

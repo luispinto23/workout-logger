@@ -2,58 +2,25 @@ package main
 
 import (
 	"my-workout-logs/internal/request"
-	"my-workout-logs/internal/response"
 	"net/http"
 )
 
-func (app *application) createWorkoutHandler(w http.ResponseWriter, r *http.Request) {
-	type Equipment struct {
-		Name string `json:"name"`
-	}
+func (app *application) createWorkoutPrescriptionHandler(w http.ResponseWriter, r *http.Request) {
+	var newPrescription request.WorkoutPrescriptionRequest
 
-	type exercise struct {
-		Name        string `json:"name"`
-		Description string `json:"description"`
-		MuscleGroup string `json:"muscle_group"`
-		Type        string `json:"type"`
-		Equipment   []Equipment
-		Difficulty  string `json:"difficulty"`
-		SeriesMin   int    `json:"series_min"`
-		SeriesMax   int    `json:"series_max"`
-		RepMin      int    `json:"rep_min"`
-		RepMax      int    `json:"rep_max"`
-		RestMin     int    `json:"rest_min"`
-		RestMax     int    `json:"rest_max"`
-		Weight      int    `json:"weight"`
-		Duration    int    `json:"duration"`
-		VideoURL    string `json:"video_url"`
-		Comment     string `json:"comment"`
-	}
-
-	type block struct {
-		Name      string     `json:"name"`
-		Exercises []exercise `json:"exercises"`
-		Comment   string     `json:"comment"`
-	}
-
-	type workout struct {
-		Name    string  `json:"name"`
-		Date    string  `json:"date"`
-		Blocks  []block `json:"blocks"`
-		Comment string  `json:"comment"`
-	}
-
-	err := request.DecodeJSON(w, r, &input)
+	err := request.DecodeJSON(w, r, &newPrescription)
 	if err != nil {
 		app.badRequest(w, r, err)
 		return
 	}
 
-	// send json response
-	err = response.JSON(w, http.StatusCreated, input)
+	_, err = app.db.createWorkoutPrescription(newPrescription)
 	if err != nil {
 		app.serverError(w, r, err)
+		return
 	}
+
+	w.WriteHeader(http.StatusNoContent)
 }
 
 func (app *application) listWorkoutsHandler(w http.ResponseWriter, r *http.Request) {

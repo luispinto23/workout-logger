@@ -4,21 +4,21 @@ import "context"
 
 // BlockInWorkoutPrescription struct
 type BlockInWorkoutPrescription struct {
-	BlockID   int    `db:"block_id"`
-	WorkoutID int    `db:"workout_id"`
-	MinSeries int    `db:"min_series"`
-	MaxSeries int    `db:"max_series"`
-	Comment   string `db:"comment"`
+	BlockID   int    `json:"block_id"`
+	WorkoutID int    `json:"workout_id"`
+	MinSeries int    `json:"min_series"`
+	MaxSeries int    `json:"max_series"`
+	Comment   string `json:"comment"`
 }
 
 // BlockResult struct
 type BlockResult struct {
-	BlockID         int    `db:"block_id"`
-	WorkoutResultID int    `db:"workout_result_id"`
-	Comment         string `db:"comment"`
+	BlockID         int    `json:"block_id"`
+	WorkoutResultID int    `json:"workout_result_id"`
+	Comment         string `json:"comment"`
 }
 
-func (db *DB) InsertBlock(block *Block) (int, error) {
+func (db *DB) InsertBlock(block *BlockInWorkoutPrescription) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 	defer cancel()
 
@@ -29,7 +29,7 @@ func (db *DB) InsertBlock(block *Block) (int, error) {
 		VALUES ($1, $2)
 		RETURNING id`
 
-	err := db.GetContext(ctx, &id, query, block.Name, block.Comment)
+	err := db.GetContext(ctx, &id, query, block.BlockID, block.WorkoutID)
 	if err != nil {
 		return 0, err
 	}

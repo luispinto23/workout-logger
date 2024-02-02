@@ -66,5 +66,5 @@ func (app *application) deletePrescription(w http.ResponseWriter, r *http.Reques
 func (app *application) getPrescriptionResults(w http.ResponseWriter, r *http.Request) {
 }
 
-func (app *application) getPrescriptionResult(w http.ResponseWriter, r *http.Request) {
+func (app *application) createPrescriptionResult(w http.ResponseWriter, r *http.Request) {
 }

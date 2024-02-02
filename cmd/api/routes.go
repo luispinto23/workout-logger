@@ -29,18 +29,14 @@ func (app *application) routes() http.Handler {
 	protectedRoutes.Use(app.requireBasicAuthentication)
 	protectedRoutes.HandleFunc("/basic-auth-protected", app.protected).Methods("GET")
 
-	workoutRoutes := mux.NewRoute().Subrouter()
-	workoutRoutes.HandleFunc("/workouts", app.createWorkoutHandler).Methods(http.MethodPost)
-	workoutRoutes.HandleFunc("/workouts", app.listWorkoutsHandler).Methods(http.MethodGet)
+	prescriptionRoutes := mux.NewRoute().Subrouter()
+	prescriptionRoutes.HandleFunc("/prescriptions", app.getPrescriptions).Methods("GET")
+	prescriptionRoutes.HandleFunc("/prescriptions/{id}", app.getPrescription).Methods("GET")
+	prescriptionRoutes.HandleFunc("/prescriptions", app.createPrescription).Methods("POST")
+	prescriptionRoutes.HandleFunc("/prescriptions/{id}", app.updatePrescription).Methods("PUT")
+	prescriptionRoutes.HandleFunc("/prescriptions/{id}", app.deletePrescription).Methods("DELETE")
 
-	workoutRoutes.HandleFunc("/workouts/{id}/results", app.createResultHandler).Methods(http.MethodPost)
-
-	exercisesRoutes := mux.NewRoute().Subrouter()
-	exercisesRoutes.HandleFunc("/exercises", app.createExerciseHandler).Methods(http.MethodPost)
-	exercisesRoutes.HandleFunc("/exercises/{id}/equipment", app.addExerciseEquipmentHandler).Methods(http.MethodPost)
-
-	equipmentsRoutes := mux.NewRoute().Subrouter()
-	equipmentsRoutes.HandleFunc("/equipments", app.createEquipmentHandler).Methods(http.MethodPost)
-
+	prescriptionRoutes.HandleFunc("/prescriptions/{id}/results", app.getPrescriptionResults).Methods("GET")
+	prescriptionRoutes.HandleFunc("/prescriptions/{id}/results", app.createPrescriptionResult).Methods("POST")
 	return mux
 }
